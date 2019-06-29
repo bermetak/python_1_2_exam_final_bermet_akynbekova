@@ -25,4 +25,12 @@
     {% if book.file %}
         <a href="{{ book.file.url }}">Скачать книгу</a>
     {% endif %}
+    <h5 class="mt-3 mb-3">Отзывы:</h5>
+    {% for comment in book.comments.all %}
+        <p>{{ comment.user.first_name }} | {{ comment.created_at }}
+
+        </p>
+        <p>{{ comment.text }}</p>
+    {% endfor %}
+
 {% endblock %}

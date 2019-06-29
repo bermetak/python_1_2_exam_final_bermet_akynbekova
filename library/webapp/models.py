@@ -33,7 +33,6 @@ class Author(models.Model):
         verbose_name_plural = "Авторы"
 
 
-
 class Book(models.Model):
     title = models.CharField(max_length=255, blank=False, null=False)
     author = models.ForeignKey(Author, blank=False, null=False, on_delete=models.CASCADE, related_name='books')
@@ -66,3 +65,18 @@ class Profile(models.Model):
     class Meta:
         verbose_name = "Профиль"
         verbose_name_plural = "Профили"
+
+
+class Comment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
+    book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name='comments')
+    text = models.TextField(max_length=5000, blank=False, null=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.pk}, {self.text}"
+
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = "Комментарий"
+        verbose_name_plural = "Комментарии"
