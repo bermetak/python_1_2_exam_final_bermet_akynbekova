@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .forms import AuthorForm, BookForm
-from .models import Author, Book
+from .models import Author, Book, Profile
 
 
 class MyDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
@@ -85,3 +85,6 @@ class BookDeleteView(MyDeleteView):
     model = Book
     success_url = reverse_lazy('webapp:book_list')
 
+class ProfileDetailView(LoginRequiredMixin, DetailView):
+    model = Profile
+    template_name = 'profile.html'

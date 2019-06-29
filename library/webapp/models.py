@@ -1,7 +1,7 @@
 from django.db import models
-
-# Create your models here.
 from django.urls import reverse
+from django.contrib.auth.models import User
+
 
 
 class SoftDeleteManager(models.Manager):
@@ -54,3 +54,15 @@ class Book(models.Model):
     class Meta:
         verbose_name = "Книга"
         verbose_name_plural = "Книги"
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    bookshelf = models.ManyToManyField(Book, related_name='shelf', verbose_name='Профиль')
+
+    def __str__(self):
+        return self.user.get_full_name()
+
+    class Meta:
+        verbose_name = "Профиль"
+        verbose_name_plural = "Профили"
