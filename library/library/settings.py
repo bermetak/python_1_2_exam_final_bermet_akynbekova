@@ -124,9 +124,9 @@ STATIC_URL = '/static/'
 
 # Auth
 
-LOGIN_REDIRECT_URL = 'webapp:author_list'
+LOGIN_REDIRECT_URL = 'webapp:book_list'
 
-LOGOUT_REDIRECT_URL = 'webapp:author_list'
+LOGOUT_REDIRECT_URL = 'webapp:book_list'
 
 
 # Uploads

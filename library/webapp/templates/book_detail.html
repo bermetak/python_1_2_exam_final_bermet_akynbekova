@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ book.title }}{% endblock %}
+
+{% block content %}
+    <h1 class="mt-2">{{ book.title }}</h1>
+    <h5>
+        <a href="{% url 'webapp:author_detail' book.author.pk %}">
+            {{ book.author.name }}
+        </a>
+    </h5>
+    <p>{{ book.published }}
+        {% if user.is_superuser %}
+            <a class="float-right" href="{% url 'webapp:book_delete' book.pk %}">Удалить</a>
+            <a class="float-right" href="{% url 'webapp:book_update' book.pk %}">Редактировать</a>
+
+        {% endif %}
+    </p>
+    {% if book.cover %}
+        <div class="img-wrapper">
+            <img class="w-25" src="{{ book.cover.url }}" alt="{{ book.title }}">
+        </div>
+    {% endif %}
+    <p class="mt-3 pre-spaces">{{ book.description }}</p>
+    {% if book.file %}
+        <a href="{{ book.file.url }}">Скачать книгу</a>
+    {% endif %}
+{% endblock %}

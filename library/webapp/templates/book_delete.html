@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %}Удалить книгу{% endblock %}
+
+{% block content %}
+    <h1 class="mt-3">Удалить книгу</h1>
+    <form method="post" enctype="multipart/form-data" action="{% url 'webapp:book_delete' book.pk %}">
+        {% csrf_token %}
+        <p>Подтвердите удаление книги {{ book.title }}</p>
+        <button type="submit" class="btn btn-primary">Удалить</button>
+    </form>
+{% endblock %}

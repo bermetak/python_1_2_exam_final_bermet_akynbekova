@@ -2,8 +2,20 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from .forms import AuthorForm
-from .models import Author
+from .forms import AuthorForm, BookForm
+from .models import Author, Book
+
+
+class MyDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+
+    def has_permission(self):
+        return self.request.user.is_superuser
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.is_deleted = True
+        self.object.save()
+        return HttpResponseRedirect(self.get_success_url())
 
 
 class AuthorListView(ListView):
@@ -25,33 +37,51 @@ class AuthorCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     def has_permission(self):
         return self.request.user.is_superuser
 
-    def form_valid(self, form):
-        form.instance.author = self.request.user
-        return super().form_valid(form)
-
 
 class AuthorUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     template_name = 'author_update.html'
     form_class = AuthorForm
     model = Author
-    #
-    # def get_permission_required(self):
-    #     return None
 
     def has_permission(self):
         return self.request.user.is_superuser
 
 
-class AuthorDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+class AuthorDeleteView(MyDeleteView):
     template_name = 'author_delete.html'
     model = Author
     success_url = reverse_lazy('webapp:author_list')
 
+
+class BookListView(ListView):
+    template_name = 'book_list.html'
+    model = Book
+    queryset = Book.objects.active()
+
+
+class BookDetailView(DetailView):
+    template_name = 'book_detail.html'
+    model = Book
+
+
+class BookCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+    template_name = 'book_create.html'
+    form_class = BookForm
+    model = Book
+
     def has_permission(self):
         return self.request.user.is_superuser
 
-    def delete(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        self.object.is_deleted = True
-        self.object.save()
-        return HttpResponseRedirect(self.get_success_url())
+class BookUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+    template_name = 'book_update.html'
+    form_class = BookForm
+    model = Book
+
+    def has_permission(self):
+        return self.request.user.is_superuser
+
+class BookDeleteView(MyDeleteView):
+    template_name = 'book_delete.html'
+    model = Book
+    success_url = reverse_lazy('webapp:book_list')
+
