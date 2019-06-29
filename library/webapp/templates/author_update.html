@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}Редактировать автора{% endblock %}
+
+{% block content %}
+
+    <h1 class="mt-3">Редактировать автора</h1>
+    <form method="post" enctype="multipart/form-data" action="{% url 'webapp:author_update' object.pk %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Отправить</button>
+    </form>
+
+{% endblock %}

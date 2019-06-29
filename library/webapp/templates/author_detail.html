@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ author.name }}{% endblock %}
+
+{% block content %}
+    <h1 class="mt-2">{{ author.name }}</h1>
+    <p>{{ author.birth_date }} — {{ author.death_date }}
+        {% if user.is_superuser %}
+            <a class="float-right" href="{% url 'webapp:author_delete' author.pk %}">Удалить</a>
+            <a class="float-right" href="{% url 'webapp:author_update' author.pk %}">Редактировать</a>
+
+        {% endif %}
+    </p>
+    {% if author.photo %}
+        <div class="img-wrapper">
+            <img class="w-25" src="{{ author.photo.url }}" alt="{{ author.name }}">
+        </div>
+    {% endif %}
+    <p class="mt-3 pre-spaces">{{ author.bio }}</p>
+{% endblock %}
